@@ -37,6 +37,12 @@ const WordleBoard: React.FC = (): JSX.Element => {
       window.location.reload();
     }
   }, [guesses, solution]);
+
+  const [correctWords, setCorrectWords] = useState<string[]>([]);
+
+  const [incorrectWords, setIncorrectWords] = useState<string[]>([]);
+
+  const [wrongPlacement, setWrongPlacement] = useState<string[]>([]);
   return (
     <div>
       {guesses.map(
@@ -48,11 +54,18 @@ const WordleBoard: React.FC = (): JSX.Element => {
             guesses={guesses}
             usableWords={usableWords}
             solution={solution}
+            setCorrectWords={setCorrectWords}
+            setIncorrectWords={setIncorrectWords}
+            setWrongPlacement={setWrongPlacement}
           />
         )
       )}
 
-      <WordleKeyboard />
+      <WordleKeyboard
+        correctLetters={correctWords}
+        unplacedLetters={wrongPlacement}
+        wrongLetters={incorrectWords}
+      />
     </div>
   );
 };

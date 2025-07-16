@@ -1,18 +1,45 @@
-import React, { JSX } from "react";
+import React, { JSX, useEffect } from "react";
 
-const WordleKeyboard: React.FC = (): JSX.Element => {
+type passedVariables = {
+  correctLetters: string[];
+  unplacedLetters: string[];
+  wrongLetters: string[];
+};
+export default function WordleKeyboard({
+  correctLetters,
+  unplacedLetters,
+  wrongLetters,
+}: passedVariables) {
   const alphabet: string[] = "abcdefghijklmnopqrstuvwxyz".split("");
+  useEffect(() => {
+    console.log(correctLetters, unplacedLetters, wrongLetters);
+  }, [correctLetters, unplacedLetters, wrongLetters]);
   return (
     <div className="keyboardBase">
-      {alphabet.map(
-        (letter: string, i: number): JSX.Element => (
-          <div className="key" id={letter} key={i}>
+      {alphabet.map((letter, i): JSX.Element => {
+        const isCorrectLetter = correctLetters.includes(letter);
+        const isunplacedLetters = unplacedLetters.includes(letter);
+        const isWrongLetter = wrongLetters.includes(letter);
+
+        return (
+          <div
+            className="key"
+            id={letter}
+            key={i}
+            style={{
+              backgroundColor: isCorrectLetter
+                ? "green"
+                : isunplacedLetters
+                ? "yellow"
+                : isWrongLetter
+                ? "gray"
+                : "white",
+            }}
+          >
             {letter}
           </div>
-        )
-      )}
+        );
+      })}
     </div>
   );
-};
-
-export default WordleKeyboard;
+}

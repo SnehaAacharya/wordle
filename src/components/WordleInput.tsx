@@ -6,8 +6,10 @@ interface Props {
   setGuesses: (guesses: string[]) => void;
   guesses: string[];
   usableWords: string[];
-
   solution: string;
+  setCorrectWords: React.Dispatch<React.SetStateAction<string[]>>;
+  setWrongPlacement: React.Dispatch<React.SetStateAction<string[]>>;
+  setIncorrectWords: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const WordleInput: React.FC<Props> = ({
@@ -16,6 +18,9 @@ const WordleInput: React.FC<Props> = ({
   guesses,
   usableWords,
   solution,
+  setCorrectWords,
+  setWrongPlacement,
+  setIncorrectWords,
 }: Props): JSX.Element => {
   const [currentGuess, setCurrentGuess] = useState<string[]>([...Array(5)]);
 
@@ -29,7 +34,6 @@ const WordleInput: React.FC<Props> = ({
         .length === 5
         ? true
         : false;
-    console.log(e.key, isCurrentGuessFull, i);
 
     if (e.key === "Backspace") {
       let inputToGoToIndex: number = i - 1 >= 0 ? i - 1 : i;
@@ -59,13 +63,23 @@ const WordleInput: React.FC<Props> = ({
         if (letter == solution[i]) {
           if (input) input.style.backgroundColor = "green";
           if (letterElement) letterElement.style.backgroundClip = "green";
+          setCorrectWords((prev) => {
+            return [...prev, letter];
+          });
         } else if (solution.includes(letter)) {
           if (input) input.style.backgroundColor = "yellow";
           if (letterElement) letterElement.style.backgroundClip = "yellow";
+          setWrongPlacement((prev) => {
+            return [...prev, letter];
+          });
         } else {
           if (input) input.style.backgroundColor = "gray";
           if (letterElement) letterElement.style.backgroundClip = "gray";
+          setIncorrectWords((prev) => {
+            return [...prev, letter];
+          });
         }
+
         let newGuesses: string[] = [...guesses];
         newGuesses[index] = word;
         setGuesses(newGuesses);
@@ -88,7 +102,6 @@ const WordleInput: React.FC<Props> = ({
             }: React.ChangeEvent<HTMLInputElement>): void => {
               let newCurrentGuess: string[] = currentGuess;
               newCurrentGuess[i] = value;
-              console.log(newCurrentGuess);
               setCurrentGuess(newCurrentGuess);
             }}
             onKeyUp={(e: React.KeyboardEvent): void => handlekeyUp(e, i)}
