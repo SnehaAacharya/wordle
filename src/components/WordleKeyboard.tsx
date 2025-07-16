@@ -11,9 +11,6 @@ export default function WordleKeyboard({
   wrongLetters,
 }: passedVariables) {
   const alphabet: string[] = "abcdefghijklmnopqrstuvwxyz".split("");
-  useEffect(() => {
-    console.log(correctLetters, unplacedLetters, wrongLetters);
-  }, [correctLetters, unplacedLetters, wrongLetters]);
   return (
     <div className="keyboardBase">
       {alphabet.map((letter, i): JSX.Element => {
